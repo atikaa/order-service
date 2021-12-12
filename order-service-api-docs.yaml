@@ -1,0 +1,129 @@
+openapi: 3.0.1
+info:
+  title: Order Service
+  description: This RESTful API manages and contains operations on Order
+  contact:
+    name: Atilay Akkan
+    email: atilayakkan@live.com
+  license:
+    name: Vodafone 1.0
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Order Service
+paths:
+  /api/orders:
+    get:
+      tags:
+      - Order Service
+      summary: REST API to get all orders
+      operationId: getAllOrders
+      parameters:
+      - name: pageable
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        "400":
+          description: "400, Bad Request."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        "200":
+          description: "200, OK."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    post:
+      tags:
+      - Order Service
+      summary: REST API to create new order
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderDTO'
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        "400":
+          description: "400, Bad Request."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        "201":
+          description: "201, Created."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        responseCode:
+          type: string
+        responseMessage:
+          type: string
+        responseDescription:
+          type: string
+        errorMessages:
+          type: array
+          items:
+            type: string
+    CreateOrderDTO:
+      required:
+      - email
+      - productID
+      type: object
+      properties:
+        productID:
+          type: string
+        email:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/Sort'
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        empty:
+          type: boolean
+        unsorted:
+          type: boolean
